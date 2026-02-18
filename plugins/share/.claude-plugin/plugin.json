@@ -1,0 +1,10 @@
+{
+  "name": "share",
+  "description": "Upload HTML and get a short URL. Includes /share command and auto-share skill.",
+  "version": "1.0.0",
+  "author": {
+    "name": "TechOps Services"
+  },
+  "homepage": "https://github.com/techops-services/share",
+  "license": "MIT"
+}
