@@ -1,0 +1,10 @@
+{
+  "name": "keeperhub",
+  "description": "Manage KeeperHub workflows, execute automations, and browse templates from Claude Code. Includes MCP server integration for full API access.",
+  "version": "1.0.0",
+  "author": { "name": "TechOps Services" },
+  "homepage": "https://app.keeperhub.com",
+  "repository": "https://github.com/techops-services/claude-plugins",
+  "license": "MIT",
+  "keywords": ["keeperhub", "workflow", "automation", "web3", "blockchain"]
+}
