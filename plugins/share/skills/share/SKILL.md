@@ -42,9 +42,10 @@ Do NOT activate when:
 
 3. **If user accepts**:
    a. Check if `share` is installed: `which share`
-   b. If not installed, auto-install:
-      - If `go` is available: `go install github.com/techops-services/share/cmd/share@latest`
-      - Otherwise: download binary from GitHub releases for the current platform
+   b. If not installed, run:
+      ```
+      curl -fsSL https://raw.githubusercontent.com/techops-services/share/main/install.sh | bash
+      ```
    c. If no config at `~/.config/share/config.toml`, create default:
       ```
       mkdir -p ~/.config/share && cat > ~/.config/share/config.toml << 'CONF'

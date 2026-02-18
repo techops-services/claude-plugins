@@ -15,32 +15,20 @@ Arguments:
 
 <context>
 Share CLI installed: !`which share 2>/dev/null || echo "NOT_INSTALLED"`
-Go installed: !`which go 2>/dev/null || echo "NOT_INSTALLED"`
-Platform: !`uname -s`
-Arch: !`uname -m`
 Config exists: !`test -f ~/.config/share/config.toml && echo "YES" || echo "NO"`
 </context>
 
 <process>
 1. **Auto-install share CLI if missing** by examining the context above
-   - If share CLI is `NOT_INSTALLED`:
-     a. **Try Go first** (if Go is available):
-        ```
-        go install github.com/techops-services/share/cmd/share@latest
-        ```
-     b. **Otherwise download the binary** from GitHub releases:
-        - Determine OS: `Darwin` = `darwin`, `Linux` = `linux`
-        - Determine arch: `arm64` or `aarch64` = `arm64`, `x86_64` = `amd64`
-        - Run:
-          ```
-          curl -fsSL "https://github.com/techops-services/share/releases/latest/download/share_0.1.0_${OS}_${ARCH}.tar.gz" | tar xz -C /usr/local/bin share
-          ```
-        - If `/usr/local/bin` needs sudo, try `$HOME/.local/bin` instead (create if needed, and note it must be in PATH)
-     c. Verify install: `share version`
-     d. If install fails, show the error and stop
+   - If share CLI is `NOT_INSTALLED`, run the install script:
+     ```
+     curl -fsSL https://raw.githubusercontent.com/techops-services/share/main/install.sh | bash
+     ```
+   - Verify install: `share version`
+   - If install fails, show the error and stop
 
 2. **Auto-configure if no config exists**
-   - If config is `NO`, run `share init` non-interactively by creating a default config:
+   - If config is `NO`, create a default config:
      ```
      mkdir -p ~/.config/share && cat > ~/.config/share/config.toml << 'CONF'
      endpoint = "https://share.techops.services"
