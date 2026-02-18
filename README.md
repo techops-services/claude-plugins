@@ -10,22 +10,15 @@ Claude Code plugin marketplace by TechOps Services.
 
 ## Available Plugins
 
-| Plugin | Description |
-|---|---|
-| `share` | Upload HTML and get a short URL. Includes `/share` command and auto-share skill. |
-
 ### share
+
+Upload HTML and get a short URL.
 
 ```
 /plugin install share@techops-plugins
 ```
 
-Requires the `share` CLI:
-
-```bash
-go install github.com/techops-services/share/cmd/share@latest
-share init
-```
+The `share` CLI binary is installed automatically on first use. Just run `/share` and it handles setup.
 
 Adds:
 - `/share` command -- share HTML files directly from Claude Code

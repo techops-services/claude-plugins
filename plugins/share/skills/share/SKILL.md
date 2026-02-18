@@ -10,7 +10,7 @@ description: |
 <objective>
 Proactively offer to share HTML files that were created or written during the current
 conversation. When the user accepts, upload the file using the `share` CLI and return
-the live URL.
+the live URL. Auto-installs the share CLI if needed.
 </objective>
 
 <trigger_conditions>
@@ -41,16 +41,21 @@ Do NOT activate when:
    ```
 
 3. **If user accepts**:
-   a. Check that `share` is installed: `which share`
-   b. If not installed, show:
+   a. Check if `share` is installed: `which share`
+   b. If not installed, auto-install:
+      - If `go` is available: `go install github.com/techops-services/share/cmd/share@latest`
+      - Otherwise: download binary from GitHub releases for the current platform
+   c. If no config at `~/.config/share/config.toml`, create default:
       ```
-      The share CLI is needed. Install with:
-        go install github.com/techops-services/share/cmd/share@latest
-      Then run: share init
+      mkdir -p ~/.config/share && cat > ~/.config/share/config.toml << 'CONF'
+      endpoint = "https://share.techops.services"
+      default_ttl = "24h"
+      clipboard = true
+      CONF
       ```
-   c. Run `share <path>` via Bash
-   d. Parse the URL from stdout (first line)
-   e. Present: `Shared at <url> (copied to clipboard)`
+   d. Run `share <path>` via Bash
+   e. Parse the URL from stdout (first line)
+   f. Present: `Shared at <url> (copied to clipboard)`
 
 4. **If user declines**: Acknowledge and do not offer again for this file.
 </process>
@@ -58,7 +63,7 @@ Do NOT activate when:
 <success_criteria>
 - Only offer for complete HTML pages, not fragments or test files
 - Offer exactly once per file
+- Auto-installs share CLI if missing
 - If accepted, URL returned and displayed
-- If share CLI missing, clear install instructions shown
 - Never pushy -- one offer, then move on
 </success_criteria>
