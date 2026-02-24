@@ -7,6 +7,5 @@
   },
   "homepage": "https://github.com/techops-services/share",
   "license": "MIT",
-  "keywords": ["html", "share", "hosting", "url"],
-  "category": "utilities"
+  "keywords": ["html", "share", "hosting", "url"]
 }

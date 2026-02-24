@@ -6,6 +6,5 @@
   "homepage": "https://app.keeperhub.com",
   "repository": "https://github.com/techops-services/claude-plugins",
   "license": "MIT",
-  "keywords": ["keeperhub", "workflow", "automation", "web3", "blockchain"],
-  "category": "automation"
+  "keywords": ["keeperhub", "workflow", "automation", "web3", "blockchain"]
 }

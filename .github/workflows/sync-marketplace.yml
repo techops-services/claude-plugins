@@ -24,6 +24,9 @@ jobs:
           MARKETPLACE=".claude-plugin/marketplace.json"
           PLUGINS_DIR="plugins"
 
+          # Load existing marketplace to preserve category values
+          existing_plugins=$(jq '.plugins // []' "$MARKETPLACE")
+
           # Build plugins array by reading each plugin.json
           plugins_json="[]"
 
@@ -44,9 +47,15 @@ jobs:
                 homepage,
                 repository,
                 license,
-                keywords,
-                category
+                keywords
               } | with_entries(select(.value != null))' "$plugin_json")
+
+            # Carry over category from existing marketplace entry if present
+            existing_category=$(echo "$existing_plugins" | jq -r --arg name "$plugin_name" \
+              '.[] | select(.name == $name) | .category // empty')
+            if [ -n "$existing_category" ]; then
+              entry=$(echo "$entry" | jq --arg cat "$existing_category" '. + {category: $cat}')
+            fi
 
             plugins_json=$(echo "$plugins_json" | jq --argjson entry "$entry" '. + [$entry]')
           done
