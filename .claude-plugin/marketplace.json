@@ -37,6 +37,19 @@
       "license": "MIT",
       "keywords": ["keeperhub", "workflow", "automation", "web3", "blockchain"],
       "category": "automation"
+    },
+    {
+      "name": "add-ui-feedback",
+      "source": "./plugins/add-ui-feedback",
+      "description": "Add a visual feedback/annotation overlay to any HTML page with bidirectional MCP bridge. Users annotate UI elements and send feedback directly to Claude, receiving responses in the browser.",
+      "version": "2.0.0",
+      "author": {
+        "name": "TechOps Services"
+      },
+      "repository": "https://github.com/techops-services/claude-plugins",
+      "license": "MIT",
+      "keywords": ["feedback", "annotation", "ui", "html", "review"],
+      "category": "utilities"
     }
   ]
 }

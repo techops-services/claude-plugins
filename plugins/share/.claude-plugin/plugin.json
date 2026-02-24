@@ -6,5 +6,7 @@
     "name": "TechOps Services"
   },
   "homepage": "https://github.com/techops-services/share",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": ["html", "share", "hosting", "url"],
+  "category": "utilities"
 }

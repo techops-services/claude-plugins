@@ -7,5 +7,6 @@
   },
   "repository": "https://github.com/techops-services/claude-plugins",
   "license": "MIT",
-  "keywords": ["feedback", "annotation", "ui", "html", "review"]
+  "keywords": ["feedback", "annotation", "ui", "html", "review"],
+  "category": "utilities"
 }

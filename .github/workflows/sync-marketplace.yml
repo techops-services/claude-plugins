@@ -1,0 +1,82 @@
+name: Sync Marketplace Registry
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/**/.claude-plugin/plugin.json"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild marketplace.json from plugin.json files
+        run: |
+          cat > /tmp/sync-marketplace.sh << 'SCRIPT'
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          MARKETPLACE=".claude-plugin/marketplace.json"
+          PLUGINS_DIR="plugins"
+
+          # Build plugins array by reading each plugin.json
+          plugins_json="[]"
+
+          for plugin_json in "$PLUGINS_DIR"/*/.claude-plugin/plugin.json; do
+            [ -f "$plugin_json" ] || continue
+
+            plugin_dir=$(dirname "$(dirname "$plugin_json")")
+            plugin_name=$(basename "$plugin_dir")
+
+            # Read fields from plugin.json, add source path
+            entry=$(jq --arg source "./$plugin_dir" \
+              '. + {source: $source} | {
+                name,
+                source,
+                description,
+                version,
+                author,
+                homepage,
+                repository,
+                license,
+                keywords,
+                category
+              } | with_entries(select(.value != null))' "$plugin_json")
+
+            plugins_json=$(echo "$plugins_json" | jq --argjson entry "$entry" '. + [$entry]')
+          done
+
+          # Sort plugins by name for stable output
+          plugins_json=$(echo "$plugins_json" | jq 'sort_by(.name)')
+
+          # Read existing marketplace.json for top-level fields, replace plugins array
+          jq --argjson plugins "$plugins_json" '.plugins = $plugins' "$MARKETPLACE" > /tmp/marketplace_new.json
+          mv /tmp/marketplace_new.json "$MARKETPLACE"
+
+          echo "Registered $(echo "$plugins_json" | jq length) plugins"
+          SCRIPT
+
+          bash /tmp/sync-marketplace.sh
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet .claude-plugin/marketplace.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit updated marketplace.json
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .claude-plugin/marketplace.json
+          git commit -m "chore: sync marketplace registry"
+          git push
